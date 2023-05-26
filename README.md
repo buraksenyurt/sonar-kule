@@ -53,4 +53,14 @@ dotnet build
 dotnet sonarscanner end /d:sonar.login="sqp_153a6591e678e112bba3f6e4d11c7d7bd0643df5"
 ```
 
+## Solution Oluşturulması ve İlk Çıktılar
+
+Deneme amaçlı bir Solution geliştiriyoruz. Dev branch'te çalışmaya özen gösteriyorum. Normalde derlenebilir bir proje ama kod tarafında saçmalamaya çalıştığım bir sürü yer var. Sırf sonar'a iş çıkarmak için. Keh keh key...Başlangıç açısından bu şekilde tarama yapmak önemli. Yeni kodlar ekledikçe biraz daha teknik borcu yükseltmeye ve çeşitlendirmeye çalışabiliriz. 30 günlük bir süre içerisinde de ilerleyişimizi görürüz. İlk sonuçlar şöyle gerçekleşmiştir.
+
+![assets/sonar_runtime_06.png](assets/sonar_runtime_06.png)
+
+Daha şimdiden çoraplar kokmaya başladı... Iyyyykkk! :P
+
+![assets/sonar_runtime_07.png](assets/sonar_runtime_07.png)
+
 __DEVAM EDECEK__
