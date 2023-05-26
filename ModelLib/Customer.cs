@@ -7,6 +7,7 @@ public class Customer{
     public string LastName { get; set; }
     public MemberType MemberType { get; set; }
     public string City { get; set; }
+    public bool IsSuspicious { get; set; }
 }
 
 public enum MemberType{

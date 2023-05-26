@@ -58,6 +58,7 @@ public class CRUDUtility
             {
                 return false;
             }
+
             product.Orders = new Order[orders.Length];
             var index = 0;
             foreach (var order in orders)
@@ -110,15 +111,44 @@ public class CRUDUtility
                     if (!CheckCustomerStatus(order.Customer, order.PaymentType, product))
                     {
                         return false;
-                    }                    
+                    }
                 }
                 Waybill waybill = new Waybill
                 {
                     Address = order.DestinationAddress,
                     CustomerFullName = order.Customer.Name + " " + order.Customer.MiddleName + " " + order.Customer.LastName,
                     Date = DateTime.Now,
-                    PaymentType = order.PaymentType
+                    PaymentType = order.PaymentType,
+                    OrderId = order.OrderId
                 };
+
+                var notificationAddress = "https://nowhere.com/api/governecy/waybill_management";
+                var apiKey = "123456789987654321";
+                var apiPass = "P@ssw0rd";
+                GovermentIntegrator integrator = new GovermentIntegrator(notificationAddress);
+                var isConnected = integrator.Connect(apiKey, apiPass);
+                if (isConnected)
+                {
+                    IntegratorResponse sendResponse = integrator.PostWaybill(waybill);
+                    if (sendResponse.Status != IntegratorStatus.Success)
+                    {
+                        //TODO Must logged this status
+                        return false;
+                    }
+                    else
+                    {
+                        if (sendResponse.Status == IntegratorStatus.FraudDetected)
+                        {
+                            //TODO Must logged this status
+                            order.Customer.IsSuspicious = true;                            
+                        }
+                    }
+                }
+                else
+                {
+                    //TODO Must logged this status
+                    return false;
+                }
 
                 index++;
             }

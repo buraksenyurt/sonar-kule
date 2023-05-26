@@ -6,6 +6,7 @@ public class Waybill
     public string CustomerFullName { get; set; }
     public DateTime Date { get; set; }
     public object PaymentType { get; set; }
+    public int OrderId { get; set; }
 }
 
 public enum PaymentType
