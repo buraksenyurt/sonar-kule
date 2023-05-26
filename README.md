@@ -4,7 +4,7 @@ Teknik borcun oluşturduğu problemlerden kurtulmanın önemli adımlarından bi
 
 ## Ön Hazırlıklar
 
-Örnekleri Ubuntu 22.04 sistemimde deniyorum. Normalde bir Sonarqube sunucusuna ihtiyacımız olur ancak resmi [dokümantasyonda](https://docs.sonarqube.org/9.7/setup-and-upgrade/install-the-server/) güzel bir docker-compose dosyası var. Dolayısıyla sistemde docker yüklü ise fazla zahmete girmeden sonarqube denemelerine başlanabilir.
+Örnekleri Ubuntu 22.04 sistemimde deniyorum. Sistemde .Net 7 sürümü yüklü. Normalde bir Sonarqube sunucusuna ihtiyacımız olur ancak resmi [dokümantasyonda](https://docs.sonarqube.org/9.7/setup-and-upgrade/install-the-server/) güzel bir docker-compose dosyası var. Dolayısıyla sistemde docker yüklü ise fazla zahmete girmeden sonarqube denemelerine başlanabilir.
 
 ```bash
 # Kendi ubuntu sistemimde bu imajı denerken 
@@ -19,5 +19,38 @@ sudo docker-compose up
 Bu işlemlerin ardından Moon'da, localhost:9000 adresine girdiğimde Sonarqube'e erişebildiğimi gördüm.
 
 ![assets/sonar_runtime_01.png](assets/sonar_runtime_01.png)
+
+## Sonarqube Tarafında Proje Oluşturulması
+
+Kod tarafının taramasını başlatmadan önce, ölçümlerin yollanacağı bir projenin SonarQube tarafında oluşturulması gerekiyor. Yeni arabirimdeki seçeneklere göre github, gitlab, bitbucket, azure vb kod repolarını seçmemiz mümkün. Ben Manually seçeneği ile ilerliyorum. Burada hangi branch ile çalışacağımız da önemli. Çalışmada ihlaller içeren bir kod tabanına ihtiyacımız var. Bunların dev isimli bir branch'te toplandığını düşünebiliriz.
+
+![assets/sonar_runtime_02.png](assets/sonar_runtime_02.png)
+
+Bu adımdan sonra bazı seçenekler gelecektir. Locally ile devam edebiliriz. Ve sonrasında aşağıdaki seçimlerle devam edebiliriz.
+
+![assets/sonar_runtime_03.png](assets/sonar_runtime_03.png)
+
+Bu kısımca bir key üretilir. Bu key bilgisi komut satırından yapacağımız taramalar için de gerekli olacaktır.
+
+![assets/sonar_runtime_04.png](assets/sonar_runtime_04.png)
+
+Şimdi hangi platform için bu projeyi kullanacağımızı belirtiyoruz. .Net platformunu ve ardından .Net Core'u seçmemiz bu çalışma için yeterli. Kalan kısımda SonarQube neler yapmamız gerektiğini zaten adım adım tarifliyor.
+
+![assets/sonar_runtime_05.png](assets/sonar_runtime_05.png)
+
+Komut satırından tarama işlemini başlatmak için dotnet-sonarscanner aracını global olarak yükleyebiliriz. Ardından proje klasöründe yine dokümanın bizim için hazırladığı komutları çalıştırmak yeterli olacaktır.
+
+```bash
+# Tool install adımı
+dotnet tool install --global dotnet-sonarscanner
+
+# projenin root klasöründe dev branch'indeyken çalıştıracağımız komut
+# tabii key değerleri benim sistemim için üretilmiştir. Siz kendi sisteminizde üretilen proje adı ve key değerlerini kullanmalısınız.
+dotnet sonarscanner begin /k:"sonar-kule-qa-project-1976" /d:sonar.host.url="http://localhost:9000"  /d:sonar.login="sqp_153a6591e678e112bba3f6e4d11c7d7bd0643df5"
+# Tarayıcıyı başlattıktan sonra projeyi build ederiz
+dotnet build
+# ve tarama işleminin sonlandırılması komutunu veririz
+dotnet sonarscanner end /d:sonar.login="sqp_153a6591e678e112bba3f6e4d11c7d7bd0643df5"
+```
 
 __DEVAM EDECEK__
