@@ -22,7 +22,7 @@ public class ConnectionManager
 
 public class CRUDUtility
 {
-    public bool CreateCategoryWithProducts(string categoryName, string categoryDescription, string productName, decimal listPrice, int stockLevel, bool onSales, DateTime createDate, float discountRate, Country country,Company company)
+    public bool CreateCategoryWithProducts(string categoryName, string categoryDescription, string productName, decimal listPrice, int stockLevel, bool onSales, DateTime createDate, float discountRate, Country country, Company company)
     {
         bool result;
         try
@@ -40,7 +40,130 @@ public class CRUDUtility
 
     public bool AddOrdersToProductAndStartShipments(int productId, Order[] orders)
     {
-        //TODO To Be Continued
+        bool result = false;
+        Product product = null;
+        try
+        {
+            product = GetProductById(productId);
+            if (product.CategoryId == 3)
+            {
+                if (!product.OnSales || product.StockLevel < 10)
+                {
+                    return false;
+                }
+            }
+
+            var calcResult = CalculateDiscountRate(product);
+            if (!calcResult)
+            {
+                return false;
+            }
+            product.Orders = new Order[orders.Length];
+            var index = 0;
+            foreach (var order in orders)
+            {
+                switch (order.Customer.MemberType)
+                {
+                    case MemberType.Regular:
+                        break;
+                    case MemberType.Gold:
+                        product.DiscountRate += 0.1F;
+                        break;
+                    case MemberType.Platinium:
+                        product.DiscountRate += 0.1F;
+                        break;
+                }
+                product.Orders[index] = order;
+
+                switch (order.Customer.City)
+                {
+                    case "Istanbul":
+                        order.ShipmentCompany = GetShipmentCompanyFromCity(order.Customer.City);
+                        break;
+                    case "Tokyo":
+                        order.ShipmentCompany = GetShipmentCompanyFromCity(order.Customer.City);
+                        break;
+                    case "New York":
+                        order.ShipmentCompany = new ShipmentCompany
+                        {
+                            CompanyId = 1,
+                            Country = Country.USA,
+                            Level = 950,
+                            Name = "YupPiiEss"
+                        };
+                        break;
+                    case "Berlin":
+                        order.ShipmentCompany = new ShipmentCompany
+                        {
+                            CompanyId = 1,
+                            Country = Country.Australia,
+                            Level = 1000,
+                            Name = "Doyçe Postal"
+                        };
+                        break;
+                    default:
+                        break;
+                }
+
+                if (order.PaymentType == PaymentType.DigitalCoin)
+                {
+                    if (!CheckCustomerStatus(order.Customer, order.PaymentType, product))
+                    {
+                        return false;
+                    }                    
+                }
+                Waybill waybill = new Waybill
+                {
+                    Address = order.DestinationAddress,
+                    CustomerFullName = order.Customer.Name + " " + order.Customer.MiddleName + " " + order.Customer.LastName,
+                    Date = DateTime.Now,
+                    PaymentType = order.PaymentType
+                };
+
+                index++;
+            }
+
+        }
+        catch (Exception excp)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    private bool CheckCustomerStatus(Customer customer, PaymentType paymentType, Product product)
+    {
+        //TODO: Check the status of customer for payment type
+        throw new NotImplementedException();
+    }
+
+    private ShipmentCompany GetShipmentCompanyFromCity(string city)
+    {
+        //TODO: Getting from Redis by City Key
+        throw new NotImplementedException();
+    }
+
+    private Product GetProductById(int productId)
+    {
+        return new Product
+        {
+            Name = "ElCi Monitor 49 Inch Ultra Super Mega Hydron HD",
+            CategoryId = 3,
+            ListPrice = 4599.99M,
+            StockLevel = 90,
+            Country = Country.Japan,
+            Company = new Company
+            {
+                Name = "Takaşi Kovaç Associated Press And Mefrüşat Klima San",
+                Country = Country.Japan
+            }
+        };
+    }
+
+    private bool CalculateDiscountRate(Product product)
+    {
+        product.DiscountRate = 0.15F;
         return true;
     }
 }
