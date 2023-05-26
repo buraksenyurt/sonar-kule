@@ -53,7 +53,7 @@ dotnet build
 dotnet sonarscanner end /d:sonar.login="sqp_153a6591e678e112bba3f6e4d11c7d7bd0643df5"
 ```
 
-## Solution Oluşturulması ve İlk Çıktılar
+## [DAY 1] Solution Oluşturulması ve İlk Çıktılar
 
 Deneme amaçlı bir Solution geliştiriyoruz. Dev branch'te çalışmaya özen gösteriyorum. Normalde derlenebilir bir proje ama kod tarafında saçmalamaya çalıştığım bir sürü yer var. Sırf sonar'a iş çıkarmak için. Keh keh key...Başlangıç açısından bu şekilde tarama yapmak önemli. Yeni kodlar ekledikçe biraz daha teknik borcu yükseltmeye ve çeşitlendirmeye çalışabiliriz. 30 günlük bir süre içerisinde de ilerleyişimizi görürüz. İlk sonuçlar şöyle gerçekleşmiştir.
 
@@ -63,4 +63,32 @@ Daha şimdiden çoraplar kokmaya başladı... Iyyyykkk! :P
 
 ![assets/sonar_runtime_07.png](assets/sonar_runtime_07.png)
 
-__DEVAM EDECEK__
+Hatta bilerek yazdığımız güvenlik açıkları da yakalanır.
+
+![assets/sonar_runtime_08.png](assets/sonar_runtime_08.png)
+
+## [DAY 2]
+
+Kodda saçmalamaya devam edip build olan ama teknik borç yükünün artmasına neden olan eklemeler sonrasındaki durum ise şöyle olacaktır.
+
+__GELECEK__
+
+## [DAY 3]
+
+__GELECEK__
+
+## [DAY 4]
+
+__GELECEK__
+
+## [DAY 5]
+
+__GELECEK__
+
+## [DAY 6]
+
+__GELECEK__
+
+## [DAY 7]
+
+__GELECEK__
