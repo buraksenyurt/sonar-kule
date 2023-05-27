@@ -1,4 +1,6 @@
-﻿using ModelLib;
+﻿using CommonLib;
+using CommonLib.Exceptions;
+using ModelLib;
 
 namespace RepositoryLib;
 
@@ -22,6 +24,11 @@ public class ConnectionManager
 
 public class CRUDUtility
 {
+    private FileLogger _logger;
+    public CRUDUtility()
+    {
+        _logger = new FileLogger();
+    }
     public bool CreateCategoryWithProducts(string categoryName, string categoryDescription, string productName, decimal listPrice, int stockLevel, bool onSales, DateTime createDate, float discountRate, Country country, Company company)
     {
         bool result;
@@ -132,21 +139,22 @@ public class CRUDUtility
                     IntegratorResponse sendResponse = integrator.PostWaybill(waybill);
                     if (sendResponse.Status != IntegratorStatus.Success)
                     {
-                        //TODO Must logged this status
+                        _logger.WarnAsync("Unsuccess the integrator calll", "AddOrdersToProductAndStartShipments Function");
                         return false;
                     }
                     else
                     {
                         if (sendResponse.Status == IntegratorStatus.FraudDetected)
                         {
-                            //TODO Must logged this status
-                            order.Customer.IsSuspicious = true;                            
+                            _logger.WarnAsync("Fraud detected", "AddOrdersToProductAndStartShipments Function");
+                            order.Customer.IsSuspicious = true;
                         }
                     }
                 }
                 else
                 {
                     //TODO Must logged this status
+                    throw new IntegratorException("Could not connect to Integrator");
                     return false;
                 }
 

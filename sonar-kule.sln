@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModelLib", "ModelLib\ModelL
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RepositoryLib", "RepositoryLib\RepositoryLib.csproj", "{CA693EDE-F578-433C-8F51-B8EA8124AF1A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonLib", "CommonLib\CommonLib.csproj", "{492DAACA-0ADC-4396-906C-7E328BF6FE4B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{CA693EDE-F578-433C-8F51-B8EA8124AF1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CA693EDE-F578-433C-8F51-B8EA8124AF1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CA693EDE-F578-433C-8F51-B8EA8124AF1A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{492DAACA-0ADC-4396-906C-7E328BF6FE4B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{492DAACA-0ADC-4396-906C-7E328BF6FE4B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{492DAACA-0ADC-4396-906C-7E328BF6FE4B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{492DAACA-0ADC-4396-906C-7E328BF6FE4B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
