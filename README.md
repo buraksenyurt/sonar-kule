@@ -2,6 +2,10 @@
 
 Teknik borcun oluşturduğu problemlerden kurtulmanın önemli adımlarından birisi yüksek kalitede kod yazabilmektir. Aynı problemi çözmek için birden fazla yol olduğundan ortak standartlarda buluşmak önemlidir. Eskiden kod yazma standartlarına ilişkin dokümanları kullanırdık. Ancak günümüzün gelişmiş IDE'leri ve uygulama geliştirme platformları, ideal kodlama için gerekli uyarıları zaten vermekte. Elbette kod tabanı çok eskiye dayanan sistemlerde bu yeterli olmayabilir. Hatta CI hattında koşacak bir kod kontrol aracı, teknik borç oluşmadan kaliteyi kontrol altına almamızı garanti edebilir. Daha önceden .Net Framework tarafında SonarQube kullanımını ele almak için [Project-Denver](https://github.com/buraksenyurt/project-denver) isimli legacy bir kobay projeyi ele almıştım. Bu repoda ise güncel .Net platformunda kullanımını inceleyip sıklıkla yapılan C# kod ihlallerini incelemeye çalışacağım.
 
+## Amaç
+
+Öncelikle uygulamanın belli bir ürün veya çözüm sunmadığını belirteyim. İlk olarak olabildiğince fazla sayıda teknik borç biriktiren ama build olan bir kod tabanı oluşturmayı hedefliyoruz. Ardından Sonarqube ihlallerini analiz edip, nasıl çözümler uygulanması gerektiği üzerine durmayı planlıyoruz. Bu anlamda projenin dev branch'i kirli kodları barındıran bir yapıya sahip ve istenen seviyeye gelene kadar da üzerinde düzeltmeler yapılmayacak.
+
 ## Ön Hazırlıklar
 
 Örnekleri Ubuntu 22.04 sistemimde deniyorum. Sistemde .Net 7 sürümü yüklü. Normalde bir Sonarqube sunucusuna ihtiyacımız olur ancak resmi [dokümantasyonda](https://docs.sonarqube.org/9.7/setup-and-upgrade/install-the-server/) güzel bir docker-compose dosyası var. Dolayısıyla sistemde docker yüklü ise fazla zahmete girmeden sonarqube denemelerine başlanabilir.
@@ -69,7 +73,17 @@ Hatta bilerek yazdığımız güvenlik açıkları da yakalanır.
 
 ## [DAY 2]
 
-Kodda saçmalamaya devam edip build olan ama teknik borç yükünün artmasına neden olan eklemeler sonrasındaki durum ise şöyle olacaktır.
+Kodda saçmalamaya devam edip build olan ama teknik borç yükünün artmasına neden olan eklemeler sonrasındaki durum ise şöyle olacaktır. Yeni eklenen kodlarla 3 yeni bug'ımız var ve teknik borcu temizleme süremiz 54 dakika. Kokan çorapların sayısı ise 30. Code Coverage oranımız 0. Yani test edilebilir bir kod tabanımız bulunmuyor.
+
+![assets/sonar_runtime_09.png](assets/sonar_runtime_09.png)
+
+Genel resme baktığımızda teknik borcu temizleme süresinin neredeyse 1.5 saate çıktığını kokan çorap sayısının 49 olduğunu ve en kötüsü de güvenlik sınavından E aldığımızı görebiliriz. Kodun güvenilirlik notu ise C.
+
+![assets/sonar_runtime_10.png](assets/sonar_runtime_10.png)
+
+Issue'ların sayısında da artış var ve Critical olarak kategorilendirilmiş bir tanesi de meşhur Cognitive Complexity değeri 15'i aşan fonksiyonlar. Bir tane üretmeyi başardım :D
+
+![assets/sonar_runtime_11.png](assets/sonar_runtime_11.png)
 
 __GELECEK__
 
