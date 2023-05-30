@@ -1,13 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <ProjectReference Include="..\ModelLib\ModelLib.csproj" />
+    <ProjectReference Include="..\RepositoryLib\RepositoryLib.csproj" />
     <ProjectReference Include="..\CommonLib\CommonLib.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.5" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.5" />
+    <ProjectReference Include="..\ModelLib\ModelLib.csproj" />
   </ItemGroup>
 
   <PropertyGroup>

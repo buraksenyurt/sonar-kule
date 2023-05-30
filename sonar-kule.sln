@@ -9,6 +9,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RepositoryLib", "Repository
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonLib", "CommonLib\CommonLib.csproj", "{492DAACA-0ADC-4396-906C-7E328BF6FE4B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientApp", "ClientApp\ClientApp.csproj", "{6228D8A0-554C-4AB6-BC05-9AB69BF69D05}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessLib", "BusinessLib\BusinessLib.csproj", "{A1E49C8B-11F1-4083-AF2A-032843EAA480}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +34,13 @@ Global
 		{492DAACA-0ADC-4396-906C-7E328BF6FE4B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{492DAACA-0ADC-4396-906C-7E328BF6FE4B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{492DAACA-0ADC-4396-906C-7E328BF6FE4B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6228D8A0-554C-4AB6-BC05-9AB69BF69D05}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6228D8A0-554C-4AB6-BC05-9AB69BF69D05}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6228D8A0-554C-4AB6-BC05-9AB69BF69D05}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6228D8A0-554C-4AB6-BC05-9AB69BF69D05}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A1E49C8B-11F1-4083-AF2A-032843EAA480}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1E49C8B-11F1-4083-AF2A-032843EAA480}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1E49C8B-11F1-4083-AF2A-032843EAA480}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1E49C8B-11F1-4083-AF2A-032843EAA480}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

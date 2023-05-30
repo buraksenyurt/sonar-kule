@@ -6,6 +6,10 @@ Teknik borcun oluşturduğu problemlerden kurtulmanın önemli adımlarından bi
 
 Öncelikle uygulamanın belli bir ürün veya çözüm sunmadığını belirteyim. İlk olarak olabildiğince fazla sayıda teknik borç biriktiren ama build olan bir kod tabanı oluşturmayı hedefliyoruz. Ardından Sonarqube ihlallerini analiz edip, nasıl çözümler uygulanması gerektiği üzerine durmayı planlıyoruz. Bu anlamda projenin dev branch'i kirli kodları barındıran bir yapıya sahip ve istenen seviyeye gelene kadar da üzerinde düzeltmeler yapılmayacak.
 
+## Branch Stratejisi
+
+Dev branch'inde yer alan kodları düzenli olarak Main branch'e de alıyorum. Main'i üretim ortamı gibi düşünebiliriz. Local ortamda SonarQube'a dev branch'ini taratmaktayız. Bu nedenle düzeltme çalışmalarına başlamadan önce Dev'in kusurlu olan ve ilerleyen zamanlardaki lablarda kullanılabilecek versiyonunu ayrı bir feature'a taşımak güzel olabilir _(fItsInTrouble isimli bir feature mesela)_
+
 ## Ön Hazırlıklar
 
 Örnekleri Ubuntu 22.04 sistemimde deniyorum. Sistemde .Net 7 sürümü yüklü. Normalde bir Sonarqube sunucusuna ihtiyacımız olur ancak resmi [dokümantasyonda](https://docs.sonarqube.org/9.7/setup-and-upgrade/install-the-server/) güzel bir docker-compose dosyası var. Dolayısıyla sistemde docker yüklü ise fazla zahmete girmeden sonarqube denemelerine başlanabilir.
@@ -85,24 +89,30 @@ Issue'ların sayısında da artış var ve Critical olarak kategorilendirilmiş 
 
 ![assets/sonar_runtime_11.png](assets/sonar_runtime_11.png)
 
-__GELECEK__
-
 ## [DAY 3]
 
-__GELECEK__
+Üçüncü günün şafağında teknik borç biraz daha artmış oldu. Bu sefer özellikle tekrarlı kodları artırmaya da çalıştım.
+
+![assets/sonar_runtime_12.png](assets/sonar_runtime_12.png)
+
+![assets/sonar_runtime_15.png](assets/sonar_runtime_15.png)
+
+![assets/sonar_runtime_13.png](assets/sonar_runtime_13.png)
+
+![assets/sonar_runtime_14.png](assets/sonar_runtime_14.png)
 
 ## [DAY 4]
 
-__GELECEK__
+__BELKİ GELEBİLİR__
 
 ## [DAY 5]
 
-__GELECEK__
+__BELKİ GELEBİLİR__
 
 ## [DAY 6]
 
-__GELECEK__
+__BELKİ GELEBİLİR__
 
 ## [DAY 7]
 
-__GELECEK__
+__BELKİ GELEBİLİR__
