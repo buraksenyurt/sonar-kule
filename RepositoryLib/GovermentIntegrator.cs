@@ -2,7 +2,7 @@ using ModelLib;
 
 namespace RepositoryLib
 {
-    internal class GovermentIntegrator
+    public class GovermentIntegrator
     {
         public GovermentIntegrator(string notificationAddress)
         {
@@ -11,18 +11,18 @@ namespace RepositoryLib
 
         public string NotificationAddress { get; }
 
-        internal bool Connect(string apiKey, string apiPass)
+        public bool Connect(string apiKey, string apiPass)
         {
             throw new NotImplementedException();
         }
 
-        internal IntegratorResponse PostWaybill(Waybill waybill)
+        public IntegratorResponse PostWaybill(Waybill waybill)
         {
             throw new NotImplementedException();
         }
     }
 
-    internal class IntegratorResponse{
+    public class IntegratorResponse{
         public string Message { get; set; }
         public IntegratorStatus Status { get; set; }
     }

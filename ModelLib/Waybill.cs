@@ -13,5 +13,7 @@ public enum PaymentType
 {
     CreditCard,
     DebitCard,
-    DigitalCoin
+    DigitalCoin,
+    Cash,
+    Gold
 }

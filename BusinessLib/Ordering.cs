@@ -1,57 +1,39 @@
-﻿using CommonLib;
+﻿using ModelLib;
+using CommonLib;
+using RepositoryLib;
 using CommonLib.Exceptions;
-using ModelLib;
 
-namespace RepositoryLib;
+namespace BusinessLib;
 
-public class DBAdapter //BSŞ 06.04.2011
+public class Ordering
 {
-    public DBAdapter(string connString)
+    private FileLogger _logger = new FileLogger();
+    private NorthwindDbContext _context;
+    public Ordering()
     {
-        //TODO Will create adapter
+        _context = new NorthwindDbContext();
     }
-}
-public class ConnectionManager //BSŞ 06.04.2011
-{
-    private string _connectionString { get; } = "server=localhost;username=sa;password=1234!;";
-    public DBAdapter CreateAdapter(string conStr)
+    private bool CalculateDiscountRate(Product product)
     {
-        var adapter = new DBAdapter(conStr);
-        return adapter;
-        //TODO: Must Used Poolling        
+        product.DiscountRate = 0.15F;
+        return true;
     }
-}
-
-public partial class CRUDUtility
-{
-    private FileLogger _logger;
-    public CRUDUtility()
+    private ShipmentCompany GetShipmentCompanyFromCity(string city)
     {
-        _logger = new FileLogger();
+        return _context.ShipmentCompanies.Where(c => c.ServedCities.Any(sc => sc.Name == city)).SingleOrDefault();
     }
-    public bool CreateCategoryWithProducts(string categoryName, string categoryDescription, string productName, decimal listPrice, int stockLevel, bool onSales, DateTime createDate, float discountRate, Country country, Company company)
+    private bool CheckCustomerStatus(Customer customer, PaymentType paymentType, Product product)
     {
-        bool result;
-        try
-        {
-            var connMngr = new ConnectionManager();
-            var adapter = connMngr.CreateAdapter("server=localhost;database=Northwind;user_id=sa;pwd:1234;integrated security=true");
-            //TODO: Insert codes will add
-            return true;
-        }
-        catch (Exception excp)
-        {
-            return false;
-        }
+        //TODO: Check the status of customer for payment type
+        throw new NotImplementedException();
     }
-
     public bool AddOrdersToProductAndStartShipments(int productId, Order[] orders)
     {
         bool result = false;
         Product product = null;
         try
         {
-            product = GetProductById(productId);
+            product = _context.GetProduct(productId);
             if (product.CategoryId == 3)
             {
                 if (!product.OnSales || product.StockLevel < 10)
@@ -157,50 +139,14 @@ public partial class CRUDUtility
                     throw new IntegratorException("Could not connect to Integrator");
                     return false;
                 }
-
                 index++;
             }
         }
         catch (Exception excp)
         {
-            return false;
+            throw new ShippingException();            
         }
 
-        return true;
-    }
-
-    private bool CheckCustomerStatus(Customer customer, PaymentType paymentType, Product product)
-    {
-        //TODO: Check the status of customer for payment type
-        throw new NotImplementedException();
-    }
-
-    private ShipmentCompany GetShipmentCompanyFromCity(string city)
-    {
-        //TODO: Getting from Redis by City Key
-        throw new NotImplementedException();
-    }
-
-    private Product GetProductById(int productId)
-    {
-        return new Product
-        {
-            Name = "ElCi Monitor 49 Inch Ultra Super Mega Hydron HD",
-            CategoryId = 3,
-            ListPrice = 4599.99M,
-            StockLevel = 90,
-            Country = Country.Japan,
-            Company = new Company
-            {
-                Name = "Takaşi Kovaç Associated Press And Mefrüşat Klima San",
-                Country = Country.Japan
-            }
-        };
-    }
-
-    private bool CalculateDiscountRate(Product product)
-    {
-        product.DiscountRate = 0.15F;
         return true;
     }
 }
