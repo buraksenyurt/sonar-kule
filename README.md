@@ -85,24 +85,30 @@ Issue'ların sayısında da artış var ve Critical olarak kategorilendirilmiş 
 
 ![assets/sonar_runtime_11.png](assets/sonar_runtime_11.png)
 
-__GELECEK__
-
 ## [DAY 3]
 
-__GELECEK__
+Üçüncü günün şafağında teknik borç biraz daha artmış oldu. Bu sefer özellikle tekrarlı kodları artırmaya da çalıştım.
+
+![assets/sonar_runtime_12.png](assets/sonar_runtime_12.png)
+
+![assets/sonar_runtime_15.png](assets/sonar_runtime_15.png)
+
+![assets/sonar_runtime_13.png](assets/sonar_runtime_13.png)
+
+![assets/sonar_runtime_14.png](assets/sonar_runtime_14.png)
 
 ## [DAY 4]
 
-__GELECEK__
+__BELKİ GELEBİLİR__
 
 ## [DAY 5]
 
-__GELECEK__
+__BELKİ GELEBİLİR__
 
 ## [DAY 6]
 
-__GELECEK__
+__BELKİ GELEBİLİR__
 
 ## [DAY 7]
 
-__GELECEK__
+__BELKİ GELEBİLİR__
