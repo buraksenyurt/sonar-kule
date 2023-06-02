@@ -103,16 +103,16 @@ Issue'ların sayısında da artış var ve Critical olarak kategorilendirilmiş 
 
 ## [DAY 4]
 
-__BELKİ GELEBİLİR__
+4ncü günde de kodda tutarlı şekilde saçmalayarak teknik borcu artırmaya çalıştım. Yeni eklenen kodlar için güncel rapor özeti şöyle.
 
-## [DAY 5]
+![assets/sonar_runtime_16.png](assets/sonar_runtime_16.png)
 
-__BELKİ GELEBİLİR__
+ve son taramaya göre tüm kod tabanının durumu aşağıdaki gibi. Teknik borcu temizleme süresi epeyce artıyor.
 
-## [DAY 6]
+![assets/sonar_runtime_17.png](assets/sonar_runtime_17.png)
 
-__BELKİ GELEBİLİR__
+## Bundan Sonrası
 
-## [DAY 7]
+Aslında projenin bundan sonraki kısımlarında teknik borcu artıracak hamleler yapmaya devam edebiliriz ancak var olan durumu gözden geçirip borçları temizleyerer ilerlemek en güzeli. 
 
-__BELKİ GELEBİLİR__
+_KENDİME NOT : Bu bir Youtube video anlatımı ile pek güzel yorumlanabilir._
