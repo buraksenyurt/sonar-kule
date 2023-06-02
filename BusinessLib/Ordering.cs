@@ -23,10 +23,25 @@ public class Ordering
     {
         return _context.ShipmentCompanies.Where(c => c.ServedCities.Any(sc => sc.Name == city)).SingleOrDefault();
     }
-    private bool CheckCustomerStatus(Customer customer, PaymentType paymentType, Product product)
+    private CustomerStatus CheckCustomerStatus(Customer customer, PaymentType paymentType, Product product)
     {
-        //TODO: Check the status of customer for payment type
-        throw new NotImplementedException();
+        if (!customer.IsSuspicious)
+        {
+            switch (paymentType)
+            {
+                case PaymentType.CreditCard:
+                case PaymentType.DebitCard:
+                case PaymentType.Cash:
+                    return CustomerStatus.Available;
+                    break;
+                default:
+                    return CustomerStatus.Declined;
+            }
+        }
+        else
+        {
+            return CustomerStatus.Declined;
+        }
     }
     public bool AddOrdersToProductAndStartShipments(int productId, Order[] orders)
     {
@@ -98,7 +113,7 @@ public class Ordering
 
                 if (order.PaymentType == PaymentType.DigitalCoin)
                 {
-                    if (!CheckCustomerStatus(order.Customer, order.PaymentType, product))
+                    if (CheckCustomerStatus(order.Customer, order.PaymentType, product) == CustomerStatus.Declined)
                     {
                         return false;
                     }
@@ -190,11 +205,17 @@ public class Ordering
 
             return result;
         }
-        catch(Exception excp)
+        catch (Exception excp)
         {
             throw new ReportException();
         }
     }
+}
+
+public enum CustomerStatus
+{
+    Available,
+    Declined
 }
 
 public class Report
