@@ -2,6 +2,7 @@
 using CommonLib;
 using RepositoryLib;
 using CommonLib.Exceptions;
+using System.Text.Json;
 
 namespace BusinessLib;
 
@@ -144,9 +145,65 @@ public class Ordering
         }
         catch (Exception excp)
         {
-            throw new ShippingException();            
+            throw new ShippingException();
         }
 
         return true;
     }
+
+    public async Task<string> GetSalaryReportByMonth(Month month)
+    {
+        string reportPath = "http://izmprsrv01/reports/api/salary/" + month.ToString();
+        HttpClient client = new HttpClient();
+        HttpResponseMessage responseMessage = await client.GetAsync(reportPath);
+        var body = await responseMessage.Content.ReadAsStringAsync();
+        var report = JsonSerializer.Deserialize<Report>(body);
+        string result = @"<table id='Table1\' style='border-width:1; border-color:Black' runat='server'><tr>
+                            <th>
+                            TotalSalary
+                            </th>
+                            <th>
+                            AverageSalaryPerDaily
+                            </th>
+                            <th>
+                            TotalUnit
+                            </th>
+                        </tr>
+                        <tr>
+                            <td>" + report.TotalSalary.ToString("C2") + @"</td>
+                            <td>
+                            " + report.AverageSalaryPerDaily.ToString("C2") + @"
+                            </td>
+                            <td>"
+                            + report.TotalUnit.ToString() + @"</td>
+                        </tr>
+                        </table>";
+
+        return result;
+    }
+
+}
+
+public class Report
+{
+    public decimal TotalSalary { get; set; }
+    public decimal AverageSalaryPerDaily { get; set; }
+    public int TotalUnit { get; set; }
+    public int AverageUnitPerDaily { get; set; }
+}
+
+public enum Month
+{
+    Jan,
+    Feb,
+    Mar,
+    Apr,
+    May,
+    Jun,
+    Jul,
+    Aug,
+    Sep,
+    Oct,
+    Now,
+    Dec
 }
