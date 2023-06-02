@@ -153,12 +153,18 @@ public class Ordering
 
     public async Task<string> GetSalaryReportByMonth(Month month)
     {
-        string reportPath = "http://izmprsrv01/reports/api/salary/" + month.ToString();
-        HttpClient client = new HttpClient();
-        HttpResponseMessage responseMessage = await client.GetAsync(reportPath);
-        var body = await responseMessage.Content.ReadAsStringAsync();
-        var report = JsonSerializer.Deserialize<Report>(body);
-        string result = @"<table id='Table1\' style='border-width:1; border-color:Black' runat='server'><tr>
+        try
+        {
+            string reportPath = "http://izmprsrv01/reports/api/salary/" + month.ToString();
+            HttpClient client = new HttpClient();
+            HttpResponseMessage responseMessage = await client.GetAsync(reportPath);
+            var body = await responseMessage.Content.ReadAsStringAsync();
+            var report = JsonSerializer.Deserialize<Report>(body);
+            string result = @"
+                            <html>
+                            <body>
+                            <h1>" + month.ToString() + @" AYLIK RAPORU </h1>
+                            <table id='Table1\' style='border-width:1; border-color:Black' runat='server'><tr>
                             <th>
                             TotalSalary
                             </th>
@@ -175,13 +181,20 @@ public class Ordering
                             " + report.AverageSalaryPerDaily.ToString("C2") + @"
                             </td>
                             <td>"
-                            + report.TotalUnit.ToString() + @"</td>
-                        </tr>
-                        </table>";
+                                + report.TotalUnit.ToString() + @"</td>
+                        </tr>                        
+                        </table>
+                        </body>
+                        </html>
+                        ";
 
-        return result;
+            return result;
+        }
+        catch(Exception excp)
+        {
+            throw new ReportException();
+        }
     }
-
 }
 
 public class Report
