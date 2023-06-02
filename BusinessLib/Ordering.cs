@@ -2,6 +2,7 @@
 using CommonLib;
 using RepositoryLib;
 using CommonLib.Exceptions;
+using System.Text.Json;
 
 namespace BusinessLib;
 
@@ -22,10 +23,25 @@ public class Ordering
     {
         return _context.ShipmentCompanies.Where(c => c.ServedCities.Any(sc => sc.Name == city)).SingleOrDefault();
     }
-    private bool CheckCustomerStatus(Customer customer, PaymentType paymentType, Product product)
+    private CustomerStatus CheckCustomerStatus(Customer customer, PaymentType paymentType, Product product)
     {
-        //TODO: Check the status of customer for payment type
-        throw new NotImplementedException();
+        if (!customer.IsSuspicious)
+        {
+            switch (paymentType)
+            {
+                case PaymentType.CreditCard:
+                case PaymentType.DebitCard:
+                case PaymentType.Cash:
+                    return CustomerStatus.Available;
+                    break;
+                default:
+                    return CustomerStatus.Declined;
+            }
+        }
+        else
+        {
+            return CustomerStatus.Declined;
+        }
     }
     public bool AddOrdersToProductAndStartShipments(int productId, Order[] orders)
     {
@@ -97,7 +113,7 @@ public class Ordering
 
                 if (order.PaymentType == PaymentType.DigitalCoin)
                 {
-                    if (!CheckCustomerStatus(order.Customer, order.PaymentType, product))
+                    if (CheckCustomerStatus(order.Customer, order.PaymentType, product) == CustomerStatus.Declined)
                     {
                         return false;
                     }
@@ -144,9 +160,84 @@ public class Ordering
         }
         catch (Exception excp)
         {
-            throw new ShippingException();            
+            throw new ShippingException();
         }
 
         return true;
     }
+
+    public async Task<string> GetSalaryReportByMonth(Month month)
+    {
+        try
+        {
+            string reportPath = "http://izmprsrv01/reports/api/salary/" + month.ToString();
+            HttpClient client = new HttpClient();
+            HttpResponseMessage responseMessage = await client.GetAsync(reportPath);
+            var body = await responseMessage.Content.ReadAsStringAsync();
+            var report = JsonSerializer.Deserialize<Report>(body);
+            string result = @"
+                            <html>
+                            <body>
+                            <h1>" + month.ToString() + @" AYLIK RAPORU </h1>
+                            <table id='Table1\' style='border-width:1; border-color:Black' runat='server'><tr>
+                            <th>
+                            TotalSalary
+                            </th>
+                            <th>
+                            AverageSalaryPerDaily
+                            </th>
+                            <th>
+                            TotalUnit
+                            </th>
+                        </tr>
+                        <tr>
+                            <td>" + report.TotalSalary.ToString("C2") + @"</td>
+                            <td>
+                            " + report.AverageSalaryPerDaily.ToString("C2") + @"
+                            </td>
+                            <td>"
+                                + report.TotalUnit.ToString() + @"</td>
+                        </tr>                        
+                        </table>
+                        </body>
+                        </html>
+                        ";
+
+            return result;
+        }
+        catch (Exception excp)
+        {
+            throw new ReportException();
+        }
+    }
+}
+
+public enum CustomerStatus
+{
+    Available,
+    Declined
+}
+
+public class Report
+{
+    public decimal TotalSalary { get; set; }
+    public decimal AverageSalaryPerDaily { get; set; }
+    public int TotalUnit { get; set; }
+    public int AverageUnitPerDaily { get; set; }
+}
+
+public enum Month
+{
+    Jan,
+    Feb,
+    Mar,
+    Apr,
+    May,
+    Jun,
+    Jul,
+    Aug,
+    Sep,
+    Oct,
+    Now,
+    Dec
 }
