@@ -23,6 +23,22 @@ public class Ordering
     {
         return _context.ShipmentCompanies.Where(c => c.ServedCities.Any(sc => sc.Name == city)).SingleOrDefault();
     }
+
+    public IEnumerable<Sales> GetSalaryReport()
+    {
+        var sales = _context.Products
+            .SelectMany(p => p.Orders)
+            .GroupBy(o => o.ProductId)
+            .Select(g => new Sales
+            {
+                ProductName = _context.Products.FirstOrDefault(p => p.ProductId == g.Key).Name,
+                TotalQuantity = g.Sum(o => o.Quantity),
+                TotalAmount = g.Sum(o => o.Quantity * _context.Products.FirstOrDefault(p => p.ProductId == g.Key).ListPrice)
+            });
+
+        return sales;
+    }
+
     private CustomerStatus CheckCustomerStatus(Customer customer, PaymentType paymentType, Product product)
     {
         if (!customer.IsSuspicious)
