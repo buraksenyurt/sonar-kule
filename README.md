@@ -115,6 +115,6 @@ ve son taramaya göre tüm kod tabanının durumu aşağıdaki gibi. Teknik borc
 
 ## Bundan Sonrası
 
-Aslında projenin bundan sonraki kısımlarında teknik borcu artıracak hamleler yapmaya devam edebiliriz ancak var olan durumu gözden geçirip borçları temizleyerer ilerlemek en güzeli. 
+Aslında projenin bundan sonraki kısımlarında teknik borcu artıracak hamleler yapmaya devam edebiliriz ancak var olan durumu gözden geçirip borçları temizleyerek ilerlemek en güzeli. 
 
 _KENDİME NOT : Bu bir Youtube video anlatımı ile pek güzel yorumlanabilir._
