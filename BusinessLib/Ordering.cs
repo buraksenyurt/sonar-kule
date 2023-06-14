@@ -226,6 +226,15 @@ public class Ordering
             throw new ReportException();
         }
     }
+
+    public void AddInvoiceDocumentToOrder(int orderId, byte[] invoiceDocument)
+    {
+        var order = _context.Orders.Where(o => o.OrderId == orderId).SingleOrDefault();
+        if (order != null)
+        {
+            order.InvoiceDocument = invoiceDocument;
+        }
+    }
 }
 
 public enum CustomerStatus

@@ -11,4 +11,5 @@ public class Order
     public PaymentType PaymentType { get; set; }
     public bool IsCompleted { get; set; }
     public int ProductId { get; set; }
+    public byte[] InvoiceDocument { get; set; }
 }
