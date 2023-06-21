@@ -9,7 +9,7 @@ public class Product
     public int CategoryId { get; set; }
     public bool OnSales { get; set; }
     public float DiscountRate { get; set; }
-    public Country Country { get; set; }
+    public Country Country { get; set; }    
     public Company Company { get; set; }
     public Order[] Orders { get; set; }
     public DateTime CreateDate { get; set; }

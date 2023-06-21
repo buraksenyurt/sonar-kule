@@ -3,6 +3,7 @@ using CommonLib;
 using RepositoryLib;
 using CommonLib.Exceptions;
 using System.Text.Json;
+using System.Transactions;
 
 namespace BusinessLib;
 
@@ -17,44 +18,52 @@ public class Common
 
     public ShipmentCompany AddCompanyToSystem(string name, Country country, int level, List<City> cities, string contactFirstName, string contactLastName, string contactAddress, string contactEmail, string contactPhone)
     {
-        var is_exist = _context.ShipmentCompanies.Where(c => c.Name == name).SingleOrDefault();
-        if (is_exist == null)
+        using (TransactionScope scope = new TransactionScope())
         {
-            var company = new ShipmentCompany
+            var is_exist = _context.ShipmentCompanies.Where(c => c.Name == name).SingleOrDefault();
+            if (is_exist == null)
             {
-                Name = name,
-                Country = country,
-                Level = level,
-                ServedCities = cities,
-                Contact = new Contact
+                var company = new ShipmentCompany
                 {
-                    FirstName = contactFirstName,
-                    LastName = contactLastName,
-                    Address = contactAddress,
-                    Email = contactEmail
-                }
-            };
+                    Name = name,
+                    Country = country,
+                    Level = level,
+                    ServedCities = cities,
+                    Contact = new Contact
+                    {
+                        FirstName = contactFirstName,
+                        LastName = contactLastName,
+                        Address = contactAddress,
+                        Email = contactEmail
+                    }
+                };
 
-            _context.ShipmentCompanies.Add(company);
-            _context.SaveChangesAsync();
-            return company;
+                _context.ShipmentCompanies.Add(company);
+                _context.SaveChangesAsync();
+                return company;
+            }
+            scope.Complete();
         }
         return null;
     }
 
     public Category AddCategoryToSystem(string name, string description)
     {
-        var is_exist = _context.Categories.Where(c => c.Title == name).SingleOrDefault();
-        if (is_exist == null)
+        using (TransactionScope scope = new TransactionScope())
         {
-            var category = new Category
+            var is_exist = _context.Categories.Where(c => c.Title == name).SingleOrDefault();
+            if (is_exist == null)
             {
-                Title = name,
-                Description = description
-            };
-            _context.Categories.AddAsync(category);
-            _context.SaveChangesAsync();
-            return category;
+                var category = new Category
+                {
+                    Title = name,
+                    Description = description
+                };
+                _context.Categories.AddAsync(category);
+                _context.SaveChangesAsync();
+                return category;
+            }
+            scope.Complete();
         }
         return null;
     }

@@ -3,6 +3,7 @@ using CommonLib;
 using RepositoryLib;
 using CommonLib.Exceptions;
 using System.Text.Json;
+using System.Transactions;
 
 namespace BusinessLib;
 
@@ -23,7 +24,6 @@ public class Ordering
     {
         return _context.ShipmentCompanies.Where(c => c.ServedCities.Any(sc => sc.Name == city)).SingleOrDefault();
     }
-
     public IEnumerable<Sales> GetSalaryReport()
     {
         var sales = _context.Products
@@ -38,7 +38,6 @@ public class Ordering
 
         return sales;
     }
-
     private CustomerStatus CheckCustomerStatus(Customer customer, PaymentType paymentType, Product product)
     {
         if (!customer.IsSuspicious)
@@ -63,125 +62,129 @@ public class Ordering
     {
         bool result = false;
         Product product = null;
-        try
+        using (TransactionScope scope = new TransactionScope())
         {
-            product = _context.GetProduct(productId);
-            if (product.CategoryId == 3)
+            try
             {
-                if (!product.OnSales || product.StockLevel < 10)
+                product = _context.GetProduct(productId);
+                if (product.CategoryId == 3)
                 {
-                    return false;
-                }
-            }
-
-            var calcResult = CalculateDiscountRate(product);
-            if (!calcResult)
-            {
-                return false;
-            }
-
-            product.Orders = new Order[orders.Length];
-            var index = 0;
-            foreach (var order in orders)
-            {
-                switch (order.Customer.MemberType)
-                {
-                    case MemberType.Regular:
-                        break;
-                    case MemberType.Gold:
-                        product.DiscountRate += 0.1F;
-                        break;
-                    case MemberType.Platinium:
-                        product.DiscountRate += 0.1F;
-                        break;
-                }
-                product.Orders[index] = order;
-
-                switch (order.Customer.City)
-                {
-                    case "Istanbul":
-                        order.ShipmentCompany = GetShipmentCompanyFromCity(order.Customer.City);
-                        break;
-                    case "Tokyo":
-                        order.ShipmentCompany = GetShipmentCompanyFromCity(order.Customer.City);
-                        break;
-                    case "New York":
-                        order.ShipmentCompany = new ShipmentCompany
-                        {
-                            CompanyId = 1,
-                            Country = Country.USA,
-                            Level = 950,
-                            Name = "YupPiiEss"
-                        };
-                        break;
-                    case "Berlin":
-                        order.ShipmentCompany = new ShipmentCompany
-                        {
-                            CompanyId = 1,
-                            Country = Country.Australia,
-                            Level = 1000,
-                            Name = "Doyçe Postal"
-                        };
-                        break;
-                    default:
-                        break;
-                }
-
-                if (order.PaymentType == PaymentType.DigitalCoin)
-                {
-                    if (CheckCustomerStatus(order.Customer, order.PaymentType, product) == CustomerStatus.Declined)
+                    if (!product.OnSales || product.StockLevel < 10)
                     {
                         return false;
                     }
                 }
-                Waybill waybill = new Waybill
-                {
-                    Address = order.DestinationAddress,
-                    CustomerFullName = order.Customer.Name + " " + order.Customer.MiddleName + " " + order.Customer.LastName,
-                    Date = DateTime.Now,
-                    PaymentType = order.PaymentType,
-                    OrderId = order.OrderId
-                };
 
-                var notificationAddress = "https://nowhere.com/api/governecy/waybill_management";
-                var apiKey = "123456789987654321";
-                var apiPass = "P@ssw0rd";
-                GovermentIntegrator integrator = new GovermentIntegrator(notificationAddress);
-                var isConnected = integrator.Connect(apiKey, apiPass);
-                if (isConnected)
+                var calcResult = CalculateDiscountRate(product);
+                if (!calcResult)
                 {
-                    IntegratorResponse sendResponse = integrator.PostWaybill(waybill);
-                    if (sendResponse.Status != IntegratorStatus.Success)
+                    return false;
+                }
+
+                product.Orders = new Order[orders.Length];
+                var index = 0;
+                foreach (var order in orders)
+                {
+                    switch (order.Customer.MemberType)
                     {
-                        _logger.WarnAsync("Unsuccess the integrator calll", "AddOrdersToProductAndStartShipments Function");
-                        return false;
+                        case MemberType.Regular:
+                            break;
+                        case MemberType.Gold:
+                            product.DiscountRate += 0.1F;
+                            break;
+                        case MemberType.Platinium:
+                            product.DiscountRate += 0.1F;
+                            break;
+                    }
+                    product.Orders[index] = order;
+
+                    switch (order.Customer.City)
+                    {
+                        case "Istanbul":
+                            order.ShipmentCompany = GetShipmentCompanyFromCity(order.Customer.City);
+                            break;
+                        case "Tokyo":
+                            order.ShipmentCompany = GetShipmentCompanyFromCity(order.Customer.City);
+                            break;
+                        case "New York":
+                            order.ShipmentCompany = new ShipmentCompany
+                            {
+                                CompanyId = 1,
+                                Country = Country.USA,
+                                Level = 950,
+                                Name = "YupPiiEss"
+                            };
+                            break;
+                        case "Berlin":
+                            order.ShipmentCompany = new ShipmentCompany
+                            {
+                                CompanyId = 1,
+                                Country = Country.Australia,
+                                Level = 1000,
+                                Name = "Doyçe Postal"
+                            };
+                            break;
+                        default:
+                            break;
+                    }
+
+                    if (order.PaymentType == PaymentType.DigitalCoin)
+                    {
+                        if (CheckCustomerStatus(order.Customer, order.PaymentType, product) == CustomerStatus.Declined)
+                        {
+                            return false;
+                        }
+                    }
+                    Waybill waybill = new Waybill
+                    {
+                        Address = order.DestinationAddress,
+                        CustomerFullName = order.Customer.Name + " " + order.Customer.MiddleName + " " + order.Customer.LastName,
+                        Date = DateTime.Now,
+                        PaymentType = order.PaymentType,
+                        OrderId = order.OrderId
+                    };
+
+                    var notificationAddress = "https://nowhere.com/api/governecy/waybill_management";
+                    var apiKey = "123456789987654321";
+                    var apiPass = "P@ssw0rd";
+                    GovermentIntegrator integrator = new GovermentIntegrator(notificationAddress);
+                    var isConnected = integrator.Connect(apiKey, apiPass);
+                    if (isConnected)
+                    {
+                        IntegratorResponse sendResponse = integrator.PostWaybill(waybill);
+                        if (sendResponse.Status != IntegratorStatus.Success)
+                        {
+                            _logger.WarnAsync("Unsuccess the integrator calll", "AddOrdersToProductAndStartShipments Function");
+                            return false;
+                        }
+                        else
+                        {
+                            if (sendResponse.Status == IntegratorStatus.FraudDetected)
+                            {
+                                _logger.WarnAsync("Fraud detected", "AddOrdersToProductAndStartShipments Function");
+                                order.Customer.IsSuspicious = true;
+                            }
+                        }
                     }
                     else
                     {
-                        if (sendResponse.Status == IntegratorStatus.FraudDetected)
-                        {
-                            _logger.WarnAsync("Fraud detected", "AddOrdersToProductAndStartShipments Function");
-                            order.Customer.IsSuspicious = true;
-                        }
+                        //TODO Must logged this status
+                        throw new IntegratorException("Could not connect to Integrator");
+                        return false;
                     }
+                    index++;
                 }
-                else
-                {
-                    //TODO Must logged this status
-                    throw new IntegratorException("Could not connect to Integrator");
-                    return false;
-                }
-                index++;
+                scope.Complete();
             }
-        }
-        catch (Exception excp)
-        {
-            throw new ShippingException();
+            catch (Exception excp)
+            {
+
+                throw new ShippingException();
+            }
         }
 
         return true;
     }
-
     public async Task<string> GetSalaryReportByMonth(Month month)
     {
         try
@@ -226,7 +229,6 @@ public class Ordering
             throw new ReportException();
         }
     }
-
     public void AddInvoiceDocumentToOrder(int orderId, byte[] invoiceDocument)
     {
         var order = _context.Orders.Where(o => o.OrderId == orderId).SingleOrDefault();
