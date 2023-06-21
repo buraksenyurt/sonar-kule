@@ -113,8 +113,12 @@ ve son taramaya göre tüm kod tabanının durumu aşağıdaki gibi. Teknik borc
 
 ![assets/sonar_runtime_17.png](assets/sonar_runtime_17.png)
 
+## [DAY 5]
+
+5nci gün itibariyle durum şöyle. Tüm teknik borç için Sonarqube'ün önerisi 4 saate yakın bir çalışmayı gerektiriyor. Kod tabanı milyon satırlarla ifade edilen yıllanmış legacy sistemleri göz önüne aldığımızda takdir edersiniz ki bu borçlar günler ve hatta aylar mertebesine çıkabilmekte.
+
+![assets/sonar_runtime_18.png](assets/sonar_runtime_18.png)
+
 ## Bundan Sonrası
 
-Aslında projenin bundan sonraki kısımlarında teknik borcu artıracak hamleler yapmaya devam edebiliriz ancak var olan durumu gözden geçirip borçları temizleyerek ilerlemek en güzeli. 
-
-_KENDİME NOT : Bu bir Youtube video anlatımı ile pek güzel yorumlanabilir._
+Aslında projenin bundan sonraki kısımlarında teknik borcu artıracak hamleler yapmaya devam edebiliriz ancak var olan durumu gözden geçirip borçları temizleyerek ilerlemek en güzeli. Bunun için bu feature'dan bir branch açıp üzerinde düzeltmeler yapıp dev branch'e merge etme yoluna gidilebilir. Örnek ile ilgili olarak bir de topluluk videomuz var. [The Codeverse Youtube kanalında](https://www.youtube.com/watch?v=YK8Go3h-vyk&t=3423s) yayınlanan videoda daha başka detaylar da bulubilirsiniz.
